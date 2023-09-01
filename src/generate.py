@@ -1,5 +1,8 @@
 from endpoints import list as all_list
 import xml.etree.ElementTree as ET
+import numpy as np
+import cv2
+import cairosvg
 
 
 colour_definitions = {
@@ -86,20 +89,16 @@ def main(
     if output_format == "svg":
         return ET.tostring(base_image)
 
-    # Open svg in cv2
-    # Convert to numpy array
-
-    image = ET.tostring(base_image)
-    image = np.frombuffer(image, np.uint8)
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-
-    # Resize to 512 or 2048
+    # Convert the SVG to a PNG using cairosvg
+    image = cairosvg.svg2png(bytestring=ET.tostring(base_image))
+    # Convert the PNG to a numpy array
+    image = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_UNCHANGED)
+    # Resize the image to the correct size
     if output_format == "512":
-        image = cv2.resize(image, (512, 512))
+        image = cv2.resize(image, (512, 512), interpolation=cv2.INTER_AREA)
     elif output_format == "2048":
-        image = cv2.resize(image, (2048, 2048))
-
-    # Convert back to bytes
-    image = cv2.imencode(".png", image)[1].tobytes()
-
+        image = cv2.resize(image, (2048, 2048), interpolation=cv2.INTER_AREA)
+    # Convert the image back to a PNG
+    image = cv2.imencode(".png", image)[1].tostring()
+    # Return the PNG as a bytestring
     return image

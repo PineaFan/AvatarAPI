@@ -16,7 +16,7 @@ def make_main(callback):
         return web.Response(body=callback(**argDict))
     return predicate
 
-# Register all files in /routes
+# Register all files in /endpoints
 
 for file in os.listdir("endpoints"):
     if file.endswith(".py"):
