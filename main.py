@@ -28,4 +28,4 @@ for file in os.listdir("endpoints"):
 
 app = web.Application()
 app.add_routes(routes)
-web.run_app(app)
+web.run_app(app, port=14862)
