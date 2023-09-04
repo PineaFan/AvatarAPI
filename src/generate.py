@@ -72,7 +72,7 @@ def main(
     base_image = ET.parse(f"assets/base.svg").getroot()
 
     if gradient_start and gradient_end:
-        base_image = set_gradient(base_image, gradient_start, gradient_end)
+        base_image = set_gradient(base_image, gradient_end, gradient_start)
     else:
         base_image = set_gradient(base_image, *colour_definitions[colour])
 
